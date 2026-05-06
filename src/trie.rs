@@ -29,8 +29,16 @@ impl Trie {
         }
     }
 
-    pub fn insert(&mut self, _number: &str, _name: &str) {
-        todo!()
+    pub fn insert(&mut self, number: &str, name: &str) {
+        let mut current = &mut self.root;
+        for ch in number.chars() {
+            if !current.children.iter().any(|(c, _)| *c == ch) {
+                current.children.push((ch, TrieNode::new()));
+            }
+            let i = current.children.iter().position(|(c, _)| *c == ch).unwrap();
+            current = &mut current.children[i].1;
+        }
+        current.name = Some(name.to_string());
     }
 }
 
