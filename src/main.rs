@@ -13,3 +13,4 @@ fn main() {
     generate_puml(&trie, "graph/output.puml");
     println!("Fichier PlantUML généré : graph/output.puml");
 }
+
