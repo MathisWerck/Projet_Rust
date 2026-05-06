@@ -47,3 +47,44 @@ impl Default for Trie {
         Self::new()
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_insert_creates_root_child() {
+        let mut trie = Trie::new();
+        trie.insert("112", "Urgences");
+        assert_eq!(trie.root.children.len(), 1);
+        assert_eq!(trie.root.children[0].0, '1');
+    }
+
+    #[test]
+    fn test_insert_common_prefix() {
+        let mut trie = Trie::new();
+        trie.insert("15", "SAMU");
+        trie.insert("112", "Urgences");
+        // La racine a un seul enfant '1'
+        assert_eq!(trie.root.children.len(), 1);
+        // Le noeud '1' a deux enfants : '5' et '1'
+        assert_eq!(trie.root.children[0].1.children.len(), 2);
+    }
+
+    #[test]
+    fn test_name_stored_at_leaf() {
+        let mut trie = Trie::new();
+        trie.insert("15", "SAMU");
+        let node_1 = &trie.root.children[0].1;
+        let node_5 = &node_1.children[0].1;
+        assert_eq!(node_5.name, Some("SAMU".to_string()));
+    }
+
+    #[test]
+    fn test_no_duplicate_nodes() {
+        let mut trie = Trie::new();
+        trie.insert("15", "SAMU");
+        trie.insert("15", "SAMU_doublon");
+        assert_eq!(trie.root.children.len(), 1);
+    }
+}
