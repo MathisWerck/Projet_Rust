@@ -13,15 +13,15 @@ fn write_node(node: &TrieNode, depth: usize, lines: &mut Vec<String>) {
     }
 }
 
-pub fn generate_puml(trie: &Trie, output_path: &str) {
+pub fn generate_puml(trie: &Trie, output_path: &str) -> Result<(), Box<dyn std::error::Error>> {
     let mut lines = Vec::new();
     lines.push("@startmindmap".to_string());
     write_node(&trie.root, 0, &mut lines);
     lines.push("@endmindmap".to_string());
 
     let content = lines.join("\n");
-    fs::write(output_path, content)
-        .expect("Impossible d'écrire le fichier PlantUML");
+    fs::write(output_path, content)?;
+    Ok(())
 }
 
 #[cfg(test)]
